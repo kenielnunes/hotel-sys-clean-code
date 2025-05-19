@@ -1,11 +1,12 @@
 import sqlite3
 from sqlite3 import Connection
 from datetime import datetime
+from pathlib import Path
 
 
 def get_connection() -> Connection:
-    conn = sqlite3.connect("hotel.db")
-    return conn
+    db_path = Path(__file__).parent.parent.parent.parent / "hotel.db"
+    return sqlite3.connect(str(db_path))
 
 
 def create_tables() -> None:
@@ -40,7 +41,7 @@ def create_tables() -> None:
             number_of_guests INTEGER NOT NULL,
             room_type TEXT NOT NULL,
             number_of_days INTEGER NOT NULL,
-            total_price REAL NOT NULL,
+            total_value REAL NOT NULL,
             status TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
