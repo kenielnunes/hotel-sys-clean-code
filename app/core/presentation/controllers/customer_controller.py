@@ -1,6 +1,5 @@
-from typing import List
-from core.domain.usecases.create_customer import CreateCustomerUseCase
-from core.infra.repository.customer_repository import CustomerRepository
+from core.domain.usecases.customer.create_customer_use_case import CreateCustomerUseCase
+from core.infra.repositories.customer_repository import CustomerRepository
 from core.presentation.types.customer_types import (
     CustomerRequest,
     CustomerSingleResponse,

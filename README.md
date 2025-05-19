@@ -20,7 +20,7 @@ pytest
 
 # Criar o banco de dados
 
-python3 -m app.@core.infra.config.database
+python3 -m app.core.infra.config.database
 
 # Rodar o App
 
