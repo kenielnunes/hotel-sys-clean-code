@@ -1,6 +1,4 @@
 import re
-from typing import List
-
 
 def _calculate_verification_digit(digits: str, factor: int) -> int:
     total = sum(int(digit) * (factor - idx) for idx, digit in enumerate(digits))

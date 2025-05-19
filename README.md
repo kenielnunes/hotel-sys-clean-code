@@ -17,3 +17,7 @@ black app tests utils
 flake8 app tests utils
 mypy app tests utils
 pytest
+
+# Criar o banco de dados
+
+python3 -m app.@core.infra.config.database
