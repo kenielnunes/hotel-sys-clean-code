@@ -1,6 +1,6 @@
 from typing import Optional
 from core.domain.entities.customer import Customer
-from core.infra.repository.customer_repository import CustomerRepository
+from core.infra.repositories.customer_repository import CustomerRepository
 from utils.cpf_validator import cpf_validator
 
 class CreateCustomerUseCase:
