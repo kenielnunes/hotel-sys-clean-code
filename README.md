@@ -21,3 +21,7 @@ pytest
 # Criar o banco de dados
 
 python3 -m app.@core.infra.config.database
+
+# Rodar o App
+
+PYTHONPATH=app python3 app/main.py
