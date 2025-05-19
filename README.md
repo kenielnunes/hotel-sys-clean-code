@@ -1,6 +1,13 @@
 # Ative o ambiente virtual
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # ou .\venv\Scripts\activate no Windows
+
+# Criar Requirements.txt com as libs
+black
+flake8
+mypy
+pytest
+coverage
 
 # Instale as dependências
 pip install -r requirements.txt
