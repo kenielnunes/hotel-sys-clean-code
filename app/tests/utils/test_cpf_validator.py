@@ -1,7 +1,6 @@
 import pytest
 from utils.cpf_validator import cpf_validator
 
-
 @pytest.mark.parametrize("valid_cpf", [
     "529.982.247-25",
     "52998224725",
