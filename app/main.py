@@ -3,9 +3,11 @@ from core.infra.config.database import create_tables
 from core.infra.repositories.customer_repository import CustomerRepository
 from core.infra.repositories.room_repository import RoomRepository
 from core.infra.repositories.reservation_repository import ReservationRepository
-from core.domain.usecases.reservation.create_reservation import CreateReservationUseCase
-from core.domain.usecases.customer.list_customers import ListCustomersUseCase
-from core.domain.usecases.room.list_rooms import ListRoomsUseCase
+from core.domain.usecases.reservation.create_reservation_use_case import CreateReservationUseCase
+from core.domain.usecases.reservation.update_reservation_use_case import UpdateReservationUseCase
+from core.domain.usecases.reservation.list_reservations_use_case import ListReservationsUseCase
+from core.domain.usecases.customer.list_customers_use_case import ListCustomersUseCase
+from core.domain.usecases.room.list_rooms_use_case import ListRoomsUseCase
 from core.presentation.controllers.customer_controller import CustomerController
 from core.presentation.controllers.reservation_controller import ReservationController
 from core.presentation.views.customer_view import CustomerView
@@ -15,27 +17,9 @@ def main():
     # Create database tables
     create_tables()
     
-    # Inicializa os repositórios
-    customer_repository = CustomerRepository()
-    room_repository = RoomRepository()
-    reservation_repository = ReservationRepository()
-
-    # Inicializa os use cases
-    create_reservation_use_case = CreateReservationUseCase(
-        reservation_repository=reservation_repository,
-        customer_repository=customer_repository,
-        room_repository=room_repository
-    )
-    list_customers_use_case = ListCustomersUseCase(customer_repository)
-    list_rooms_use_case = ListRoomsUseCase(room_repository)
-
     # Inicializa os controladores
     customer_controller = CustomerController()
-    reservation_controller = ReservationController(
-        create_reservation_use_case=create_reservation_use_case,
-        list_customers_use_case=list_customers_use_case,
-        list_rooms_use_case=list_rooms_use_case
-    )
+    reservation_controller = ReservationController()
 
     # Inicializa as views
     customer_view = CustomerView(customer_controller)
@@ -43,19 +27,37 @@ def main():
 
     while True:
         print("\n=== Sistema de Hotel ===")
-        print("1 - Cadastrar Cliente")
-        print("2 - Nova Reserva")
-        print("3 - Sair")
+        print("\nGerenciamento de Clientes")
+        print("   1 - Cadastrar Cliente")
+        print("   2 - Listar Clientes")
+        print("\nGerenciamento de Reservas")
+        print("   3 - Nova Reserva")
+        print("   4 - Listar Reservas")
+        print("   5 - Atualizar Reserva")
+        print("\nOperações de Check-in/Check-out")
+        print("   6 - Realizar Check-in")
+        print("   7 - Realizar Check-out")
+        print("\n0 - Sair")
         
         try:
-            opcao = int(input("\nEscolha uma opção: "))
+            option = int(input("\nEscolha uma opção: "))
             
-            if opcao == 1:
+            if option == 1:
                 customer_view.create_customer()
-            elif opcao == 2:
+            elif option == 2:
+                customer_view.list_customers()
+            elif option == 3:
                 reservation_view.create_reservation()
-            elif opcao == 3:
-                print("\n\033[0;32mObrigado por usar o sistema!\033[m")
+            elif option == 4:
+                reservation_view.list_reservations()
+            elif option == 5:
+                reservation_view.update_reservation()
+            elif option == 6:
+                reservation_view.checkin_reservation()
+            elif option == 7:
+                reservation_view.checkout_reservation()
+            elif option == 0:
+                print("\n\033[0;32mObrigado por usar!\033[m")
                 break
             else:
                 print("\n\033[0;31mOpção inválida!\033[m")

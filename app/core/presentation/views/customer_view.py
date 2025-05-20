@@ -20,25 +20,18 @@ class CustomerView:
     def create_customer(self):
         print("\n=== Cadastro de Cliente ===")
         
-        # Get customer name
-        name = self.get_valid_input("Nome do cliente: ")
-        
-        # Get and validate CPF
-        cpf = self.get_valid_input(
-            "CPF do cliente (apenas números ou com formatação): ",
-            validator=cpf_validator
-        )
-        
-        # Create customer using controller
-        response = self._controller.create({
-            'name': name,
-            'cpf': cpf
-        })
-        
-        if response['status_code'] == 201:
-            print("\n\033[92mCliente cadastrado com sucesso!\033[0m")
-            print(f"ID: {response['body']['id']}")
-            print(f"Nome: {response['body']['name']}")
-            print(f"CPF: {response['body']['cpf']}")
-        else:
-            print(f"\n\033[91mErro ao cadastrar cliente: {response['body']['error']}\033[0m") 
+        name = input("\nNome do cliente: ")
+        if not name:
+            print("\n\033[0;31mNome é obrigatório!\033[m")
+            return
+
+        cpf = input("CPF do cliente: ")
+        if not cpf:
+            print("\n\033[0;31mCPF é obrigatório!\033[m")
+            return
+
+        try:
+            customer = self._controller.create_customer(name=name, cpf=cpf)
+            print(f"\n\033[0;32mCliente cadastrado com sucesso! ID: {customer.id}\033[m")
+        except ValueError as e:
+            print(f"\n\033[0;31mErro: {str(e)}\033[m") 
