@@ -25,6 +25,7 @@ class UpdateReservationUseCase:
         if not reservation:
             raise ValueError("Reserva não encontrada")
 
+        # Atualiza os campos se fornecidos
         if room_type:
             # Valida se o tipo de quarto existe
             room = self._room_repository.find_by_type(room_type)

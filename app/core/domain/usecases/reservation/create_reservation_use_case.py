@@ -1,5 +1,7 @@
 from typing import Optional
-from core.domain.entities.reservation import Reservation
+from datetime import datetime
+from core.domain.entities.reservation import Reservation, ReservationStatus
+from core.domain.entities.room import Room, RoomType
 from core.infra.repositories.reservation_repository import ReservationRepository
 from core.infra.repositories.customer_repository import CustomerRepository
 from core.infra.repositories.room_repository import RoomRepository
@@ -28,20 +30,28 @@ class CreateReservationUseCase:
             raise ValueError("Cliente não encontrado")
 
         # Verifica se o tipo de quarto é válido
-        room = self._room_repository.find_by_type(room_type)
-        if not room:
+        room_type = room_type.upper()
+        if room_type not in [t.value for t in RoomType]:
             raise ValueError("Tipo de quarto inválido")
 
-        # Cria a reserva
+        # Calcula o valor total
+        daily_rate = Room.get_daily_rate(room_type)
+        print(f"Daily rate for {room_type}: R$ {daily_rate:.2f}")
+        total_value = daily_rate * number_of_guests * number_of_days
+        print(f"Total value: R$ {total_value:.2f} ({daily_rate} * {number_of_guests} * {number_of_days})")
+
         reservation = Reservation(
+            id=None,  # Será definido pelo banco de dados
             customer_id=customer_id,
             room_type=room_type,
             number_of_guests=number_of_guests,
-            number_of_days=number_of_days
+            number_of_days=number_of_days,
+            total_value=total_value,
+            status=ReservationStatus.RESERVED,  # Status inicial
+            created_at=datetime.now(),
+            updated_at=datetime.now()
         )
 
-        # Calcula o valor total
-        reservation.calculate_total_value(room.daily_rate)
-
-        # Salva a reserva
-        return self._reservation_repository.create(reservation) 
+        saved_reservation = self._reservation_repository.create(reservation)
+        print(f"Saved reservation total value: R$ {saved_reservation.total_value:.2f}")
+        return saved_reservation 
