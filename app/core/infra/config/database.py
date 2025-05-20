@@ -9,7 +9,6 @@ def get_connection() -> Connection:
     # Get the project root directory
     root_dir = Path(__file__).parent.parent.parent.parent.parent
     db_path = root_dir / "hotel.db"
-    print(f"Database path: {db_path}")
     return sqlite3.connect(str(db_path))
 
 

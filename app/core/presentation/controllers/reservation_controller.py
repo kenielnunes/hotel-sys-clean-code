@@ -1,10 +1,11 @@
 from typing import List, Optional
 from core.domain.entities.customer import Customer
 from core.domain.entities.room import Room
-from core.domain.entities.reservation import Reservation
+from core.domain.entities.reservation import Reservation, ReservationStatus
 from core.domain.usecases.reservation.create_reservation_use_case import CreateReservationUseCase
 from core.domain.usecases.reservation.update_reservation_use_case import UpdateReservationUseCase
 from core.domain.usecases.reservation.list_reservations_use_case import ListReservationsUseCase
+from core.domain.usecases.reservation.list_reservations_by_status_use_case import ListReservationsByStatusUseCase
 from core.domain.usecases.reservation.checkin_reservation_use_case import CheckinReservationUseCase
 from core.domain.usecases.reservation.checkout_reservation_use_case import CheckoutReservationUseCase
 from core.domain.usecases.customer.list_customers_use_case import ListCustomersUseCase
@@ -31,6 +32,7 @@ class ReservationController:
             self._room_repository
         )
         self._list_reservations_use_case = ListReservationsUseCase(self._reservation_repository)
+        self._list_reservations_by_status_use_case = ListReservationsByStatusUseCase(self._reservation_repository)
         self._checkin_reservation_use_case = CheckinReservationUseCase(self._reservation_repository)
         self._checkout_reservation_use_case = CheckoutReservationUseCase(self._reservation_repository)
         self._list_customers_use_case = ListCustomersUseCase(self._customer_repository)
@@ -56,7 +58,7 @@ class ReservationController:
         room_type: Optional[str] = None,
         number_of_guests: Optional[int] = None,
         number_of_days: Optional[int] = None
-    ) -> Optional[Reservation]:
+    ) -> Reservation:
         return self._update_reservation_use_case.execute(
             reservation_id=reservation_id,
             room_type=room_type,
@@ -67,10 +69,13 @@ class ReservationController:
     def list_reservations(self) -> List[Reservation]:
         return self._list_reservations_use_case.execute()
 
-    def checkin_reservation(self, reservation_id: int):
+    def list_reservations_by_status(self, status: ReservationStatus) -> List[Reservation]:
+        return self._list_reservations_by_status_use_case.execute(status)
+
+    def checkin_reservation(self, reservation_id: int) -> Reservation:
         return self._checkin_reservation_use_case.execute(reservation_id)
 
-    def checkout_reservation(self, reservation_id: int):
+    def checkout_reservation(self, reservation_id: int) -> Reservation:
         return self._checkout_reservation_use_case.execute(reservation_id)
 
     def list_customers(self) -> List[Customer]:

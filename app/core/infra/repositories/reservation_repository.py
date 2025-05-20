@@ -81,6 +81,15 @@ class ReservationRepository(BaseRepository[Reservation]):
         rows = cursor.fetchall()
         return [self._map_row_to_entity(row) for row in rows]
 
+    def find_by_status(self, status: ReservationStatus) -> List[Reservation]:
+        cursor = self._get_cursor()
+        cursor.execute(
+            "SELECT * FROM reservations WHERE status = ? ORDER BY created_at DESC",
+            (status.value,)
+        )
+        rows = cursor.fetchall()
+        return [self._map_row_to_entity(row) for row in rows]
+
     def update_status(self, id: int, status: ReservationStatus) -> Optional[Reservation]:
         cursor = self._get_cursor()
         cursor.execute(
