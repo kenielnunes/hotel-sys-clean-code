@@ -1,6 +1,7 @@
 from core.domain.entities.reservation import Reservation, ReservationStatus
 from core.infra.repositories.reservation_repository import ReservationRepository
 
+
 class CheckinReservationUseCase:
     def __init__(self, reservation_repository: ReservationRepository):
         self._reservation_repository = reservation_repository
@@ -14,8 +15,8 @@ class CheckinReservationUseCase:
             raise ValueError("Apenas reservas confirmadas podem fazer check-in")
 
         reservation.status = ReservationStatus.CHECKED_IN
-        
+
         print(f"reservation {reservation}")
 
         # Salva a alteração
-        return self._reservation_repository.update(reservation) 
+        return self._reservation_repository.update(reservation)

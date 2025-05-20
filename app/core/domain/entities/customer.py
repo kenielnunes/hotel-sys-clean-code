@@ -1,6 +1,7 @@
 from datetime import datetime
 from dataclasses import dataclass
 
+
 @dataclass
 class Customer:
     id: int
@@ -12,4 +13,4 @@ class Customer:
         if not self.name:
             raise ValueError("Name is required")
         if not self.cpf:
-            raise ValueError("CPF is required") 
+            raise ValueError("CPF is required")

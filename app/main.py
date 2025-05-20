@@ -4,10 +4,11 @@ from core.presentation.controllers.reservation_controller import ReservationCont
 from core.presentation.views.customer_view import CustomerView
 from core.presentation.views.reservation_view import ReservationView
 
+
 def main():
     # Create database tables
     create_tables()
-    
+
     # Inicializa os controladores
     customer_controller = CustomerController()
     reservation_controller = ReservationController()
@@ -29,10 +30,10 @@ def main():
         print("   6 - Realizar Check-in")
         print("   7 - Realizar Check-out")
         print("\n0 - Sair")
-        
+
         try:
             option = int(input("\nEscolha uma opção: "))
-            
+
             if option == 1:
                 customer_view.create_customer()
             elif option == 2:
@@ -55,5 +56,6 @@ def main():
         except ValueError:
             print("\n\033[0;31mPor favor, digite um número válido!\033[m")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

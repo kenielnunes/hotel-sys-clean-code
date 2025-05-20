@@ -2,7 +2,8 @@ from typing import TypeVar, Generic, List, Optional
 from sqlite3 import Connection, Cursor
 from core.infra.config.database import get_connection
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class BaseRepository(Generic[T]):
     def __init__(self, table_name: str):
@@ -48,4 +49,4 @@ class BaseRepository(Generic[T]):
         return cursor.rowcount > 0
 
     def _map_row_to_entity(self, row) -> T:
-        raise NotImplementedError("Subclasses must implement _map_row_to_entity method") 
+        raise NotImplementedError("Subclasses must implement _map_row_to_entity method")

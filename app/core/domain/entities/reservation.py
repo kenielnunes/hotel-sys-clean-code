@@ -3,11 +3,13 @@ from enum import Enum
 from typing import Optional
 from .room import Room
 
+
 class ReservationStatus(Enum):
-    RESERVED = "R"      # Reserved
-    CHECKED_IN = "A"    # Active - Check-in completed
-    CHECKED_OUT = "F"   # Finished - Check-out completed
-    CANCELLED = "C"     # Cancelled
+    RESERVED = "R"  # Reserved
+    CHECKED_IN = "A"  # Active - Check-in completed
+    CHECKED_OUT = "F"  # Finished - Check-out completed
+    CANCELLED = "C"  # Cancelled
+
 
 class Reservation:
     def __init__(
@@ -20,7 +22,7 @@ class Reservation:
         total_value: float,
         status: ReservationStatus,
         created_at: datetime,
-        updated_at: Optional[datetime] = None
+        updated_at: Optional[datetime] = None,
     ):
         self.id = id
         self.customer_id = customer_id
@@ -41,4 +43,4 @@ class Reservation:
 
     def calculate_total_price(self) -> float:
         daily_rate = Room.get_daily_rate(self.room_type)
-        return daily_rate * self.number_of_guests * self.number_of_days 
+        return daily_rate * self.number_of_guests * self.number_of_days

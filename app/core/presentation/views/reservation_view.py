@@ -3,6 +3,7 @@ from core.domain.entities.reservation import Reservation, ReservationStatus
 from core.domain.entities.room import RoomType
 from core.presentation.controllers.reservation_controller import ReservationController
 
+
 class ReservationView:
     def __init__(self, reservation_controller: ReservationController):
         self._reservation_controller = reservation_controller
@@ -19,7 +20,9 @@ class ReservationView:
 
         while True:
             try:
-                escolha = int(input("\nSelecione o número do cliente (ou 0 para voltar): "))
+                escolha = int(
+                    input("\nSelecione o número do cliente (ou 0 para voltar): ")
+                )
                 if escolha == 0:
                     return None
                 if 1 <= escolha <= len(customers):
@@ -47,7 +50,7 @@ class ReservationView:
 
     def get_reservation_details(self):
         print("\n=== Nova Reserva ===")
-        
+
         # Seleciona cliente
         customer = self.show_customers()
         if not customer:
@@ -82,22 +85,28 @@ class ReservationView:
             "customer_id": customer["id"],
             "room_type": room["type"],
             "number_of_guests": number_of_guests,
-            "number_of_days": number_of_days
+            "number_of_days": number_of_days,
         }
 
     def list_reservations(self):
         print("\n=== Lista de Reservas ===")
         reservations = self._reservation_controller.list_reservations()
-        
+
         if not reservations:
             print("\n\033[0;31mNenhuma reserva encontrada!\033[m")
             return
 
         for reservation in reservations:
-            customer = next((c for c in self._reservation_controller.list_customers() 
-                           if c.id == reservation.customer_id), None)
+            customer = next(
+                (
+                    c
+                    for c in self._reservation_controller.list_customers()
+                    if c.id == reservation.customer_id
+                ),
+                None,
+            )
             customer_name = customer.name if customer else "Cliente não encontrado"
-            
+
             print(f"\nID: {reservation.id}")
             print(f"Cliente: {customer_name}")
             print(f"Quarto: {reservation.room_type}")
@@ -105,11 +114,13 @@ class ReservationView:
             print(f"Dias: {reservation.number_of_days}")
             print(f"Valor Total: R$ {reservation.total_value:.2f}")
             print(f"Status: {reservation.status.value}")
-            print(f"Data de Criação: {reservation.created_at.strftime('%d/%m/%Y %H:%M')}")
+            print(
+                f"Data de Criação: {reservation.created_at.strftime('%d/%m/%Y %H:%M')}"
+            )
 
     def create_reservation(self):
         print("\n=== Nova Reserva ===")
-        
+
         # Lista clientes
         customers = self._reservation_controller.list_customers()
         if not customers:
@@ -159,7 +170,7 @@ class ReservationView:
                 customer_id=customer_id,
                 room_type=room_type,
                 number_of_guests=number_of_guests,
-                number_of_days=number_of_days
+                number_of_days=number_of_days,
             )
             print(f"\n\033[0;32mReserva criada com sucesso! ID: {reservation.id}\033[m")
         except Exception as e:
@@ -168,17 +179,23 @@ class ReservationView:
     def update_reservation(self):
         print("\n=== Atualizar Reserva ===")
         reservations = self._reservation_controller.list_reservations()
-        
+
         if not reservations:
             print("\n\033[0;31mNenhuma reserva encontrada!\033[m")
             return
 
         print("\nReservas disponíveis:")
         for reservation in reservations:
-            customer = next((c for c in self._reservation_controller.list_customers() 
-                           if c.id == reservation.customer_id), None)
+            customer = next(
+                (
+                    c
+                    for c in self._reservation_controller.list_customers()
+                    if c.id == reservation.customer_id
+                ),
+                None,
+            )
             customer_name = customer.name if customer else "Cliente não encontrado"
-            
+
             print(f"\nID: {reservation.id}")
             print(f"Cliente: {customer_name}")
             print(f"Quarto: {reservation.room_type}")
@@ -200,13 +217,17 @@ class ReservationView:
             print(f"{room.type} - {room.type.value} (R$ {room.daily_rate:.2f}/dia)")
 
         # Seleciona tipo de quarto
-        room_type = input("\nSelecione o tipo de quarto (S/D/P) ou pressione Enter para manter: ").upper()
+        room_type = input(
+            "\nSelecione o tipo de quarto (S/D/P) ou pressione Enter para manter: "
+        ).upper()
         if room_type and room_type not in ["S", "D", "P"]:
             print("\n\033[0;31mTipo de quarto inválido!\033[m")
             return
 
         # Número de hóspedes
-        number_of_guests_str = input("\nNúmero de hóspedes ou pressione Enter para manter: ")
+        number_of_guests_str = input(
+            "\nNúmero de hóspedes ou pressione Enter para manter: "
+        )
         number_of_guests = int(number_of_guests_str) if number_of_guests_str else None
         if number_of_guests is not None and number_of_guests < 1:
             print("\n\033[0;31mNúmero de hóspedes inválido!\033[m")
@@ -224,27 +245,37 @@ class ReservationView:
                 reservation_id=reservation_id,
                 room_type=room_type if room_type else None,
                 number_of_guests=number_of_guests,
-                number_of_days=number_of_days
+                number_of_days=number_of_days,
             )
-            print(f"\n\033[0;32mReserva atualizada com sucesso! ID: {reservation.id}\033[m")
+            print(
+                f"\n\033[0;32mReserva atualizada com sucesso! ID: {reservation.id}\033[m"
+            )
         except Exception as e:
             print(f"\n\033[0;31mErro ao atualizar reserva: {str(e)}\033[m")
 
     def checkin_reservation(self):
         print("\n=== Realizar Check-in ===")
         # Lista apenas reservas com status RESERVED
-        reservations = self._reservation_controller.list_reservations_by_status(ReservationStatus.RESERVED)
-        
+        reservations = self._reservation_controller.list_reservations_by_status(
+            ReservationStatus.RESERVED
+        )
+
         if not reservations:
             print("\n\033[0;31mNenhuma reserva pendente de check-in!\033[m")
             return
 
         print("\nReservas pendentes de check-in:")
         for reservation in reservations:
-            customer = next((c for c in self._reservation_controller.list_customers() 
-                           if c.id == reservation.customer_id), None)
+            customer = next(
+                (
+                    c
+                    for c in self._reservation_controller.list_customers()
+                    if c.id == reservation.customer_id
+                ),
+                None,
+            )
             customer_name = customer.name if customer else "Cliente não encontrado"
-            
+
             print(f"\nID: {reservation.id}")
             print(f"Cliente: {customer_name}")
             print(f"Quarto: {reservation.room_type}")
@@ -254,30 +285,44 @@ class ReservationView:
 
         reservation_id = int(input("\nSelecione o ID da reserva para check-in: "))
         if not any(r.id == reservation_id for r in reservations):
-            print("\n\033[0;31mReserva não encontrada ou não está pendente de check-in!\033[m")
+            print(
+                "\n\033[0;31mReserva não encontrada ou não está pendente de check-in!\033[m"
+            )
             return
 
         try:
-            reservation = self._reservation_controller.checkin_reservation(reservation_id)
-            print(f"\n\033[0;32mCheck-in realizado com sucesso! ID: {reservation.id}\033[m")
+            reservation = self._reservation_controller.checkin_reservation(
+                reservation_id
+            )
+            print(
+                f"\n\033[0;32mCheck-in realizado com sucesso! ID: {reservation.id}\033[m"
+            )
         except Exception as e:
             print(f"\n\033[0;31mErro ao realizar check-in: {str(e)}\033[m")
 
     def checkout_reservation(self):
         print("\n=== Realizar Check-out ===")
         # Lista apenas reservas com status CHECKED_IN
-        reservations = self._reservation_controller.list_reservations_by_status(ReservationStatus.CHECKED_IN)
-        
+        reservations = self._reservation_controller.list_reservations_by_status(
+            ReservationStatus.CHECKED_IN
+        )
+
         if not reservations:
             print("\n\033[0;31mNenhuma reserva pendente de check-out!\033[m")
             return
 
         print("\nReservas pendentes de check-out:")
         for reservation in reservations:
-            customer = next((c for c in self._reservation_controller.list_customers() 
-                           if c.id == reservation.customer_id), None)
+            customer = next(
+                (
+                    c
+                    for c in self._reservation_controller.list_customers()
+                    if c.id == reservation.customer_id
+                ),
+                None,
+            )
             customer_name = customer.name if customer else "Cliente não encontrado"
-            
+
             print(f"\nID: {reservation.id}")
             print(f"Cliente: {customer_name}")
             print(f"Quarto: {reservation.room_type}")
@@ -287,12 +332,18 @@ class ReservationView:
 
         reservation_id = int(input("\nSelecione o ID da reserva para check-out: "))
         if not any(r.id == reservation_id for r in reservations):
-            print("\n\033[0;31mReserva não encontrada ou não está pendente de check-out!\033[m")
+            print(
+                "\n\033[0;31mReserva não encontrada ou não está pendente de check-out!\033[m"
+            )
             return
 
         try:
-            reservation = self._reservation_controller.checkout_reservation(reservation_id)
-            print(f"\n\033[0;32mCheck-out realizado com sucesso! ID: {reservation.id}\033[m")
+            reservation = self._reservation_controller.checkout_reservation(
+                reservation_id
+            )
+            print(
+                f"\n\033[0;32mCheck-out realizado com sucesso! ID: {reservation.id}\033[m"
+            )
         except Exception as e:
             print(f"\n\033[0;31mErro ao realizar check-out: {str(e)}\033[m")
 
@@ -300,4 +351,4 @@ class ReservationView:
         print("\nTipos de quarto disponíveis:")
         rooms = self._reservation_controller.list_rooms()
         for room in rooms:
-            print(f"{room.type.value} - R$ {room.daily_rate:.2f} por dia") 
+            print(f"{room.type.value} - R$ {room.daily_rate:.2f} por dia")

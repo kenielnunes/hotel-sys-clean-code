@@ -16,29 +16,33 @@ def create_tables() -> None:
     conn = get_connection()
     cursor = conn.cursor()
 
-
     # Create customers table
-    cursor.execute("""
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS customers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             cpf TEXT NOT NULL UNIQUE,
             created_at TEXT NOT NULL
         )
-    """)
+    """
+    )
 
     # Create rooms table
-    cursor.execute("""
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS rooms (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             type TEXT NOT NULL,
             daily_rate REAL NOT NULL,
             created_at TEXT NOT NULL
         )
-    """)
+    """
+    )
 
     # Create reservations table
-    cursor.execute("""
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS reservations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customer_id INTEGER NOT NULL,
@@ -51,7 +55,8 @@ def create_tables() -> None:
             updated_at TEXT,
             FOREIGN KEY (customer_id) REFERENCES customers (id)
         )
-    """)
+    """
+    )
 
     # Insert default room types if they don't exist
     print("Inserting default room types...")
@@ -62,13 +67,14 @@ def create_tables() -> None:
             [
                 (RoomType.STANDARD.value, 100.0, datetime.now().isoformat()),
                 (RoomType.DELUXE.value, 200.0, datetime.now().isoformat()),
-                (RoomType.PREMIUM.value, 300.0, datetime.now().isoformat())
-            ]
+                (RoomType.PREMIUM.value, 300.0, datetime.now().isoformat()),
+            ],
         )
 
     conn.commit()
     conn.close()
     print("Tables created successfully!")
+
 
 if __name__ == "__main__":
     create_tables()

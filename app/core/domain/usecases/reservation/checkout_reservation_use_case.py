@@ -1,6 +1,7 @@
 from core.domain.entities.reservation import Reservation, ReservationStatus
 from core.infra.repositories.reservation_repository import ReservationRepository
 
+
 class CheckoutReservationUseCase:
     def __init__(self, reservation_repository: ReservationRepository):
         self._reservation_repository = reservation_repository
@@ -11,8 +12,10 @@ class CheckoutReservationUseCase:
             raise ValueError("Reserva não encontrada")
 
         if reservation.status != ReservationStatus.CHECKED_IN:
-            raise ValueError("Apenas reservas com check-in realizado podem fazer check-out")
+            raise ValueError(
+                "Apenas reservas com check-in realizado podem fazer check-out"
+            )
 
         reservation.status = ReservationStatus.CHECKED_OUT
 
-        return self._reservation_repository.update(reservation) 
+        return self._reservation_repository.update(reservation)

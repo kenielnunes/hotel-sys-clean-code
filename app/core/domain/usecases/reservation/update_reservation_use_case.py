@@ -4,11 +4,12 @@ from core.domain.entities.reservation import Reservation, ReservationStatus
 from core.infra.repositories.reservation_repository import ReservationRepository
 from core.infra.repositories.room_repository import RoomRepository
 
+
 class UpdateReservationUseCase:
     def __init__(
         self,
         reservation_repository: ReservationRepository,
-        room_repository: RoomRepository
+        room_repository: RoomRepository,
     ):
         self._reservation_repository = reservation_repository
         self._room_repository = room_repository
@@ -18,7 +19,7 @@ class UpdateReservationUseCase:
         reservation_id: int,
         room_type: Optional[str] = None,
         number_of_guests: Optional[int] = None,
-        number_of_days: Optional[int] = None
+        number_of_days: Optional[int] = None,
     ) -> Optional[Reservation]:
         # Busca a reserva existente
         reservation = self._reservation_repository.find_by_id(reservation_id)
@@ -50,4 +51,4 @@ class UpdateReservationUseCase:
         days = int(reservation.number_of_days)
         reservation.total_value = daily_rate * guests * days
 
-        return self._reservation_repository.update(reservation) 
+        return self._reservation_repository.update(reservation)

@@ -13,7 +13,7 @@ class CustomerRepository(BaseRepository[Customer]):
         try:
             cursor.execute(
                 "INSERT INTO customers (name, cpf, created_at) VALUES (?, ?, ?)",
-                (customer.name, customer.cpf, customer.created_at.isoformat())
+                (customer.name, customer.cpf, customer.created_at.isoformat()),
             )
             self._commit()
             customer.id = cursor.lastrowid
@@ -25,7 +25,7 @@ class CustomerRepository(BaseRepository[Customer]):
         cursor = self._get_cursor()
         cursor.execute(
             "UPDATE customers SET name = ?, cpf = ? WHERE id = ?",
-            (customer.name, customer.cpf, customer.id)
+            (customer.name, customer.cpf, customer.id),
         )
         self._commit()
         return customer
@@ -50,7 +50,7 @@ class CustomerRepository(BaseRepository[Customer]):
                 id=row[0],
                 name=row[1],
                 cpf=row[2],
-                created_at=datetime.fromisoformat(row[3])
+                created_at=datetime.fromisoformat(row[3]),
             )
         except Exception as e:
-            raise 
+            raise

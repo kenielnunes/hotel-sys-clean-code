@@ -3,10 +3,12 @@ from datetime import datetime
 from dataclasses import dataclass
 from typing import Dict
 
+
 class RoomType(Enum):
     STANDARD = "S"  # Standard Room
-    DELUXE = "D"    # Deluxe Room
-    PREMIUM = "P"   # Premium Room
+    DELUXE = "D"  # Deluxe Room
+    PREMIUM = "P"  # Premium Room
+
 
 @dataclass
 class Room:
@@ -25,7 +27,7 @@ class Room:
         descriptions = {
             RoomType.STANDARD: "Standard Room",
             RoomType.DELUXE: "Deluxe Room",
-            RoomType.PREMIUM: "Premium Room"
+            RoomType.PREMIUM: "Premium Room",
         }
         return descriptions.get(self.type, "Unknown room type")
 
@@ -33,7 +35,7 @@ class Room:
         rates = {
             RoomType.STANDARD: 100.0,
             RoomType.DELUXE: 200.0,
-            RoomType.PREMIUM: 300.0
+            RoomType.PREMIUM: 300.0,
         }
         return rates.get(self.type, 0.0)
 
@@ -42,7 +44,7 @@ class Room:
         rates = {
             RoomType.STANDARD.value: 100.0,
             RoomType.DELUXE.value: 200.0,
-            RoomType.PREMIUM.value: 300.0
+            RoomType.PREMIUM.value: 300.0,
         }
         room_type = room_type.upper()
         if room_type not in rates:
@@ -54,9 +56,9 @@ class Room:
         descriptions = {
             RoomType.STANDARD.value: "Standard Room",
             RoomType.DELUXE.value: "Deluxe Room",
-            RoomType.PREMIUM.value: "Premium Room"
+            RoomType.PREMIUM.value: "Premium Room",
         }
         room_type = room_type.upper()
         if room_type not in descriptions:
             raise ValueError(f"Invalid room type: {room_type}")
-        return descriptions[room_type] 
+        return descriptions[room_type]
