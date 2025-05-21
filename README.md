@@ -25,3 +25,7 @@ python3 -m app.core.infra.config.database
 # Rodar o App
 
 PYTHONPATH=app python3 app/main.py
+
+# Rodar o Sonarqube
+
+sonar-scanner
