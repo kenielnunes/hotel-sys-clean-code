@@ -79,12 +79,19 @@ class ReservationController:
         number_of_guests: Optional[int] = None,
         number_of_days: Optional[int] = None,
     ) -> Reservation:
-        return self._update_reservation_use_case.execute(
-            reservation_id=reservation_id,
-            room_type=room_type,
-            number_of_guests=number_of_guests,
-            number_of_days=number_of_days,
-        )
+        """
+        Atualiza uma reserva usando a interface fluente.
+        """
+        builder = self._update_reservation_use_case.with_reservation(reservation_id)
+        
+        if room_type:
+            builder.update_room_type(room_type)
+        if number_of_guests:
+            builder.update_number_of_guests(number_of_guests)
+        if number_of_days:
+            builder.update_number_of_days(number_of_days)
+            
+        return builder.save()
 
     def list_reservations(self) -> List[Reservation]:
         return self._list_reservations_use_case.execute()
