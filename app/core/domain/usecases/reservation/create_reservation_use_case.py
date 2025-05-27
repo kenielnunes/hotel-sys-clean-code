@@ -25,12 +25,10 @@ class CreateReservationUseCase:
         number_of_guests: int,
         number_of_days: int,
     ) -> Optional[Reservation]:
-        # Verifica se o cliente existe
         customer = self._customer_repository.find_by_id(customer_id)
         if not customer:
             raise ValueError("Cliente não encontrado")
 
-        # Verifica se o tipo de quarto é válido
         room_type = room_type.upper()
         if room_type not in [t.value for t in RoomType]:
             raise ValueError("Tipo de quarto inválido")

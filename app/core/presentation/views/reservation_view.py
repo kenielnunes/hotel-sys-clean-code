@@ -2,8 +2,7 @@ from typing import Optional, List
 from core.domain.entities.reservation import Reservation, ReservationStatus
 from core.domain.entities.room import RoomType
 from core.presentation.controllers.reservation_controller import ReservationController
-from datetime import datetime, timedelta
-
+from datetime import datetime
 
 class ReservationView:
     def __init__(self, reservation_controller: ReservationController):
@@ -205,20 +204,15 @@ class ReservationView:
 
             customer_id = int(self.get_valid_input("\nDigite o ID do cliente: "))
             
-            # Seleciona tipo de quarto
             room_type = self.get_valid_room_type()
             
-            # Número de hóspedes
             number_of_guests = self.get_valid_number("Número de hóspedes: ")
             
-            # Data de entrada e saída
             check_in = self.get_valid_date("Data de entrada (DD/MM/AAAA): ")
             check_out = self.get_valid_date("Data de saída (DD/MM/AAAA): ", min_date=check_in)
 
-            # Calcula o número de dias
             number_of_days = (check_out - check_in).days
 
-            # Cria a reserva
             reservation = self._reservation_controller.create_reservation(
                 customer_id=customer_id,
                 room_type=room_type,
@@ -246,7 +240,6 @@ class ReservationView:
         self.print_header("ATUALIZAR RESERVA")
         
         try:
-            # Lista reservas para seleção
             reservations = self._reservation_controller.list_reservations()
             if not reservations:
                 print("\n\033[1;33mNenhuma reserva encontrada.\033[m")
@@ -274,32 +267,40 @@ class ReservationView:
 
             reservation_id = int(self.get_valid_input("\nDigite o ID da reserva: "))
             
-            # Seleciona novo tipo de quarto
             room_type = self.get_valid_room_type()
             
-            # Número de hóspedes
             number_of_guests = self.get_valid_number("Novo número de hóspedes: ")
             
-            # Novas datas
             check_in = self.get_valid_date("Nova data de entrada (DD/MM/AAAA): ")
             check_out = self.get_valid_date("Nova data de saída (DD/MM/AAAA): ", min_date=check_in)
 
-            # Calcula o número de dias
             number_of_days = (check_out - check_in).days
 
-            # Atualiza a reserva
+            # Atualiza a reserva usando a interface fluente
             reservation = self._reservation_controller.update_reservation(
                 reservation_id=reservation_id,
-                room_type=room_type,
+                room_type=room_type.value,  # Convertendo RoomType para string
                 number_of_guests=number_of_guests,
                 number_of_days=number_of_days
             )
 
+            # Busca o cliente para exibição
+            customer = next(
+                (
+                    c
+                    for c in self._reservation_controller.list_customers()
+                    if c.id == reservation.customer_id
+                ),
+                None,
+            )
+            
+            customer_name = customer.name if customer else "Cliente não encontrado"
+
             print(f"\n\033[1;32mReserva atualizada com sucesso!\033[m")
             print(f"\n\033[1;37mDados atualizados:")
             print(f"ID: {reservation.id}")
-            print(f"Cliente: {reservation.customer.name}")
-            print(f"Quarto: {reservation.room.type.name}")
+            print(f"Cliente: {customer_name}")
+            print(f"Quarto: {reservation.room_type}")
             print(f"Número de hóspedes: {number_of_guests}")
             print(f"Número de dias: {number_of_days}")
             print(f"Valor total: R$ {reservation.total_value:.2f}\033[m")
@@ -313,7 +314,6 @@ class ReservationView:
         self.print_header("CHECK-IN")
         
         try:
-            # Lista reservas pendentes
             reservations = self._reservation_controller.list_reservations()
             if not reservations:
                 print("\n\033[1;33mNenhuma reserva encontrada.\033[m")
@@ -341,7 +341,6 @@ class ReservationView:
 
             reservation_id = int(self.get_valid_input("\nDigite o ID da reserva para check-in: "))
             
-            # Realiza o check-in
             reservation = self._reservation_controller.checkin_reservation(reservation_id)
 
             print(f"\n\033[1;32mCheck-in realizado com sucesso!\033[m")
@@ -362,8 +361,8 @@ class ReservationView:
         self.print_header("CHECK-OUT")
         
         try:
-            # Lista reservas em andamento
             reservations = self._reservation_controller.list_reservations()
+            
             if not reservations:
                 print("\n\033[1;33mNenhuma reserva encontrada.\033[m")
                 return
@@ -391,10 +390,8 @@ class ReservationView:
 
             reservation_id = int(self.get_valid_input("\nDigite o ID da reserva para check-out: "))
             
-            # Realiza o check-out
             reservation = self._reservation_controller.checkout_reservation(reservation_id)
 
-            # Busca o cliente para exibição
             customer = next(
                 (
                     cus
