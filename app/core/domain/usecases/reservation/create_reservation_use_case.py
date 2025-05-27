@@ -41,17 +41,16 @@ class CreateReservationUseCase:
             f"Total value: R$ {total_value:.2f} ({daily_rate} * {number_of_guests} * {number_of_days})"
         )
 
-        reservation = Reservation(
-            id=None,  # Será definido pelo banco de dados
-            customer_id=customer_id,
-            room_type=room_type,
-            number_of_guests=number_of_guests,
-            number_of_days=number_of_days,
-            total_value=total_value,
-            status=ReservationStatus.RESERVED,  # Status inicial
-            created_at=datetime.now(),
-            updated_at=datetime.now(),
-        )
+        reservation = Reservation.create()\
+            .with_customer_id(customer_id)\
+            .with_room_type(room_type)\
+            .with_number_of_guests(number_of_guests)\
+            .with_number_of_days(number_of_days)\
+            .with_total_value(total_value)\
+            .with_status(ReservationStatus.RESERVED)\
+            .with_created_at(datetime.now())\
+            .with_updated_at(datetime.now())\
+            .build()
 
         saved_reservation = self._reservation_repository.create(reservation)
         print(f"Saved reservation total value: R$ {saved_reservation.total_value:.2f}")

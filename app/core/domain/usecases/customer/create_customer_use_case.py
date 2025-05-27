@@ -17,7 +17,11 @@ class CreateCustomerUseCase:
         if existing_customer:
             raise ValueError("CPF já cadastrado")
 
-        customer = Customer(id=None, name=name, cpf=cpf, created_at=datetime.now())
+        customer = Customer.create()\
+            .with_name(name)\
+            .with_cpf(cpf)\
+            .with_created_at(datetime.now())\
+            .build()
 
         try:
             saved_customer = self._customer_repository.create(customer)
