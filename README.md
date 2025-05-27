@@ -105,25 +105,25 @@ sonar-scanner
 
 ## 🧪 Como rodar os testes e cobertura
 
-3. **Execute os testes:**
+# **Execute os testes:**
 
 ```bash
 pytest
 ```
 
-4. **Execute os testes com coverage:**
+## **Execute os testes com coverage:**
 
 ```bash
 coverage run -m pytest app/tests/
 ```
 
-5. **Veja o relatório de cobertura no terminal:**
+## **Veja o relatório de cobertura no terminal:**
 
 ```bash
 coverage report -m
 ```
 
-6. **(Opcional) Gere um relatório HTML de cobertura:**
+## **(Opcional) Gere um relatório HTML de cobertura:**
 
 ```bash
 coverage html
